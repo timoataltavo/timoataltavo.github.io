@@ -3,24 +3,22 @@
 <title>Hello World</title>
 <script>
 function connect() {
+    let device;
+
     console.log('Connecting to Altavo Radarboard...');
-    const altavoRadarboardFilter = { vendorId: 0x0483, productId: 0x0002a };
-    this.device = await navigator.usb.requestDevice({
-        filters: [altavoRadarboardFilter],
-    });
-    console.log('Connected to Altavo Radarboard');
-    await this.device.open();
-    console.log('Opened Altavo Radarboard');
-    await this.device.selectConfiguration(1);
-    console.log('Selected Altavo Radarboard configuration');
-    await this.device.claimInterface(1);
-    console.log('Claimed Altavo Radarboard interface');
+    navigator.usb.requestDevice({ filters: [{ vendorId: 0x0483, productId: 0x0002a }] })
+    .then(selectedDevice => {
+        device = selectedDevice;
+        return device.open(); // Begin a session.
+    })
+    .then(() => device.selectConfiguration(1)) // Select configuration #1 for the device.
+    .then(() => device.claimInterface(1)) // Request exclusive control over interface #2.
 }
 </script>
 </head>
 <body>
 <h1>Hello World</h1>
 <!-- Button to call the connect script -->
-<button onclick="connect()">Connect</button>
+<button onclick="connect();">Connect</button>
 </body>
 </html>
