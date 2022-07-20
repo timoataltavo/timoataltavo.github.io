@@ -1,9 +1,26 @@
-# Hello World HTML File
 <html>
 <head>
 <title>Hello World</title>
+<script>
+function connect() {
+    console.log('Connecting to Altavo Radarboard...');
+    const altavoRadarboardFilter = { vendorId: 0x0483, productId: 0x0002a };
+    this.device = await navigator.usb.requestDevice({
+        filters: [altavoRadarboardFilter],
+    });
+    console.log('Connected to Altavo Radarboard');
+    await this.device.open();
+    console.log('Opened Altavo Radarboard');
+    await this.device.selectConfiguration(1);
+    console.log('Selected Altavo Radarboard configuration');
+    await this.device.claimInterface(1);
+    console.log('Claimed Altavo Radarboard interface');
+}
+</script>
 </head>
 <body>
 <h1>Hello World</h1>
+<!-- Button to call the connect script -->
+<button onclick="connect()">Connect</button>
 </body>
 </html>
